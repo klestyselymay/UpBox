@@ -1,0 +1,15 @@
+{
+    "theme":[
+        {
+            "bg": "black",
+            "fg": "lime"
+        }
+    ],
+
+    "client":[
+        {
+            "client color": "green",
+            "server color": "blue"
+        }
+    ]
+}

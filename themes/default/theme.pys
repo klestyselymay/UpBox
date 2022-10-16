@@ -1,0 +1,8 @@
+{
+    "theme":[
+        {
+            "name": "default",
+            "description": "the default theme for upbox-2.0"
+        }
+    ]
+}
