@@ -2,6 +2,7 @@
 UpBox is a free hacking tool that allow you to hack while messaging your server or team.
 
 watch the [demo here](https://youtu.be/NeTSSWEfYNs)
+
 this verision has very cool features like multiple themes or multiple servers etc. [python-3.10](https://www.python.org/downloads/release/python-3100/) is required for this tool and its important that you dont mess with the json files if you want to make a theme. to install UpBox just download it and then on the terminal with the dir and then run `pip install -r requirements.txt`
 once all the libraries are installed just run: `python main.py`. and for linux: `python3 main.py`. just wait for it to load and you should see this:
 
