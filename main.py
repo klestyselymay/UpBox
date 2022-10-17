@@ -194,20 +194,7 @@ def select_theme(number1):
                 with open(f'themes\\{sel_theme1}\\theme.json') as settings_f2:
                     main_theme = json.load(settings_f2)
                 subprocess.call('cls', shell=True)
-                if main_theme['theme'][0]['fg'] == 'white':
-                    print(Fore.WHITE)
-                elif main_theme['theme'][0]['fg'] == 'blue':
-                    print(Fore.BLUE)
-                elif main_theme['theme'][0]['fg'] == 'red':
-                    print(Fore.RED)
-                elif main_theme['theme'][0]['fg'] == 'green':
-                    print(Fore.GREEN)
-                elif main_theme['theme'][0]['fg'] == 'cyan':
-                    print(Fore.CYAN)
-                elif main_theme['theme'][0]['fg'] == 'pink':
-                    print(Fore.MAGENTA)
-                elif main_theme['theme'][0]['fg'] == 'lime':
-                    print(Fore.LIGHTGREEN_EX)
+                print(get_color_escape(main_theme['theme'][0]['fg']['red'], main_theme['theme'][0]['fg']['green'], main_theme['theme'][0]['fg']['blue']))
                 select_theme(sel_theme_)
                 
     
