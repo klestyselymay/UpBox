@@ -13,6 +13,7 @@ enter your desired name and it should close the script. re run it again and you 
 ![2](https://user-images.githubusercontent.com/103524696/196044979-5f67ad8e-bf1d-4fa2-99d5-37d24837c86e.PNG)
 
 hit enter and the you will see this:
+
 ![3](https://user-images.githubusercontent.com/103524696/196045117-2637afd6-f828-4072-9ae5-c55f0a09b61f.PNG)
 
 you can navigate using the arrow keys (`↑`){`↓`)
