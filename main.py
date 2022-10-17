@@ -18,6 +18,10 @@ def print_there(x, y, text):
      sys.stdout.write("\x1b7\x1b[%d;%df%s\x1b8" % (x, y, text))
      sys.stdout.flush()
 
+RESET = '\033[0m'
+def get_color_escape(r, g, b, background=False):
+    return '\033[{};2;{};{};{}m'.format(48 if background else 38, r, g, b)
+
 count = 0
 with open('themes.list')as theme_count1:
         for x in theme_count1:
@@ -62,24 +66,10 @@ with open('themes.list')as theme_list_file:
 with open('themes.list')as theme_list_file1:
     theme_name_list = theme_list_file1.read()
 
-def loadcolor():
-    if main_theme['theme'][0]['fg'] == 'white':
-        print(Fore.WHITE)
-    elif main_theme['theme'][0]['fg'] == 'blue':
-        print(Fore.BLUE)
-    elif main_theme['theme'][0]['fg'] == 'red':
-        print(Fore.RED)
-    elif main_theme['theme'][0]['fg'] == 'green':
-        print(Fore.GREEN)
-    elif main_theme['theme'][0]['fg'] == 'cyan':
-        print(Fore.CYAN)
-    elif main_theme['theme'][0]['fg'] == 'pink':
-        print(Fore.MAGENTA)
-    elif main_theme['theme'][0]['fg'] == 'lime':
-        print(Fore.LIGHTGREEN_EX)
-
 def select_theme(number1):
+    global main_theme
     kb.release('Enter')
+    print(get_color_escape(main_theme['theme'][0]['fg']['red'], main_theme['theme'][0]['fg']['green'], main_theme['theme'][0]['fg']['blue']))
     subprocess.call('cls', shell=True)
     print(theme_name_list)
     if number1 == '':
@@ -121,30 +111,16 @@ def select_theme(number1):
                 sel_theme = {
                                 "settings":[
                                     {
-                                        "theme": sel_theme
+                                        "theme": sel_theme1
                                     }
                                 ]
                             }  
                 with open('settings\\settings.json', 'w') as theme_file:
                     json.dump(sel_theme, theme_file, indent=4)
-
-                with open(f'themes\\{sel_theme1}\\theme.json') as settings_f2:
-                    main_theme = json.load(settings_f2)
+                with open(f'themes\\{sel_theme1}\\theme.json')as theme_2:
+                    main_theme = json.load(theme_2)
                 subprocess.call('cls', shell=True)
-                if main_theme['theme'][0]['fg'] == 'white':
-                    print(Fore.WHITE)
-                elif main_theme['theme'][0]['fg'] == 'blue':
-                    print(Fore.BLUE)
-                elif main_theme['theme'][0]['fg'] == 'red':
-                    print(Fore.RED)
-                elif main_theme['theme'][0]['fg'] == 'green':
-                    print(Fore.GREEN)
-                elif main_theme['theme'][0]['fg'] == 'cyan':
-                    print(Fore.CYAN)
-                elif main_theme['theme'][0]['fg'] == 'pink':
-                    print(Fore.MAGENTA)
-                elif main_theme['theme'][0]['fg'] == 'lime':
-                    print(Fore.LIGHTGREEN_EX)
+                print(get_color_escape(main_theme['theme'][0]['fg']['red'], main_theme['theme'][0]['fg']['green'], main_theme['theme'][0]['fg']['blue']))
                 select_theme(sel_theme_)
 
 
@@ -280,20 +256,7 @@ def join_srv(name1, address1):
     def listen_for_messages():
         while True:
             message = s.recv(1024).decode()
-            if main_theme['client'][0]['server color'] == 'white':
-                print(Fore.WHITE)
-            elif main_theme['client'][0]['server color'] == 'blue':
-                print(Fore.BLUE)
-            elif main_theme['client'][0]['server color'] == 'red':
-                print(Fore.RED)
-            elif main_theme['client'][0]['server color'] == 'green':
-                print(Fore.GREEN)
-            elif main_theme['client'][0]['server color'] == 'cyan':
-                print(Fore.CYAN)
-            elif main_theme['client'][0]['server color'] == 'pink':
-                print(Fore.MAGENTA)
-            elif main_theme['client'][0]['server color'] == 'lime':
-                print(Fore.LIGHTGREEN_EX)
+            print(get_color_escape(main_theme['client'][0]['server color']['red'], main_theme['client'][0]['server color']['green'], main_theme['client'][0]['server color']['blue']))
 
             if opt2 in message:
                 epr = message.replace(opt2, "")
@@ -308,21 +271,8 @@ def join_srv(name1, address1):
                 print("\n" + message)
 
             elif name123 in message:
-                if main_theme['client'][0]['client color'] == 'white':
-                    print(Fore.WHITE)
-                elif main_theme['client'][0]['client color'] == 'blue':
-                    print(Fore.BLUE)
-                elif main_theme['client'][0]['client color'] == 'red':
-                    print(Fore.RED)
-                elif main_theme['client'][0]['client color'] == 'green':
-                    print(Fore.GREEN)
-                elif main_theme['client'][0]['client color'] == 'cyan':
-                    print(Fore.CYAN)
-                elif main_theme['client'][0]['client color'] == 'pink':
-                    print(Fore.MAGENTA)
-                elif main_theme['client'][0]['client color'] == 'lime':
-                    print(Fore.LIGHTGREEN_EX)
-                print("\n" + message)
+                print(get_color_escape(main_theme['client'][0]['client color']['red'], main_theme['client'][0]['client color']['green'], main_theme['client'][0]['client color']['blue']))
+                print(message)
 
             else:
                 print("\n" + message)
@@ -331,14 +281,7 @@ def join_srv(name1, address1):
     t.start()
 
     while True:
-        if main_theme['client'][0]['client color'] == 'green':
-            print(Fore.GREEN)
-
-        elif main_theme['client'][0]['client color'] == 'blue':
-            print(Fore.BLUE)
-
-        elif main_theme['client'][0]['client color'] == 'red':
-            print(Fore.RED)
+        print(get_color_escape(main_theme['client'][0]['client color']['red'], main_theme['client'][0]['client color']['green'], main_theme['client'][0]['client color']['blue']))
         to_send = input()
 
         if to_send.lower() == 'q':
@@ -454,6 +397,7 @@ time.sleep(.4)
 print('\r                                                                                      ', end='')
 
 
+subprocess.call('cls', shell=True)
 copyright1 = """
  /$$   /$$           /$$$$$$$                             /$$$$$$       /$$$$$$ 
 | $$  | $$          | $$__  $$                           /$$__  $$     /$$$_  $$
@@ -468,20 +412,8 @@ copyright1 = """
           |__/  
 github: @klestyselimay
 youtube: @klesty selimay"""
-if main_theme['theme'][0]['fg'] == 'white':
-    print(Fore.WHITE)
-elif main_theme['theme'][0]['fg'] == 'blue':
-    print(Fore.BLUE)
-elif main_theme['theme'][0]['fg'] == 'red':
-    print(Fore.RED)
-elif main_theme['theme'][0]['fg'] == 'green':
-    print(Fore.GREEN)
-elif main_theme['theme'][0]['fg'] == 'cyan':
-    print(Fore.CYAN)
-elif main_theme['theme'][0]['fg'] == 'pink':
-    print(Fore.MAGENTA)
-elif main_theme['theme'][0]['fg'] == 'lime':
-    print(Fore.LIGHTGREEN_EX)
+
+
 
 newjson = {
     "data":[
@@ -491,6 +423,7 @@ newjson = {
         }
     ]
 }
+print(get_color_escape(main_theme['theme'][0]['fg']['red'], main_theme['theme'][0]['fg']['green'], main_theme['theme'][0]['fg']['blue']))
 
 if name == 'user':
     while True:
