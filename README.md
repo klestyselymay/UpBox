@@ -57,7 +57,7 @@ your theme name
 and just load it in the terminal.
 
 if you want to add a server. its pretty similar to the theme.
-all you need to do is on the **servers** folder create a **servername.srv**
+all you need to do is on the **servers** folder and create a **servername.srv**
 ```
 ip:port
 ```
