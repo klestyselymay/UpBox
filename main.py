@@ -11,6 +11,7 @@ import keyboard as kb
 from datetime import datetime
 import random
 import os
+import re
 
 empty1 = ''
 
@@ -226,16 +227,16 @@ def join_srv(name1, address1):
     address1 = address1.split(':')
     opt1 = '/'+name1+'/'
     opt2 = '//'+name1
-    name123 = f'] {name1}:'
+    name123 = f'[{name1}]'
     SERVER_HOST = address1[0]
     SERVER_PORT = int(address1[1])
     separator_token = ": "
 
     s = socket.socket()
 
-    print(f"[*] Connecting to {SERVER_HOST}:{SERVER_PORT}...")
+    print(f"[CLiENT] Connecting to {SERVER_HOST}:{SERVER_PORT}...")
     s.connect((SERVER_HOST, SERVER_PORT))
-    print("[+] Connected.")
+    print("[SERVER] Connected.")
     s.send(name1.encode())
     input()
     input()
@@ -258,11 +259,12 @@ def join_srv(name1, address1):
                 print("\n" + message)
 
             elif name123 in message:
-                print(get_color_escape(main_theme['client'][0]['client color']['red'], main_theme['client'][0]['client color']['green'], main_theme['client'][0]['client color']['blue']))
-                print(message)
+                print(get_color_escape(main_theme['client'][0]['client color']['red'], main_theme['client'][0]['client color']['green'], main_theme['client'][0]['client color']['blue'])+name123+get_color_escape(main_theme['theme'][0]['fg']['red'], main_theme['theme'][0]['fg']['green'], main_theme['theme'][0]['fg']['blue']) + message.replace(name123, ' '))
 
             else:
-                print("\n" + message)
+                message_s = re.findall(r'\[.*?\]', message)
+                message = message.replace(f'{message_s[0]} ', '')
+                print(get_color_escape(main_theme['client'][0]['server color']['red'],main_theme['client'][0]['server color']['green'],main_theme['client'][0]['server color']['blue'])+"\n"+message_s[0],get_color_escape(main_theme['theme'][0]['fg']['red'],main_theme['theme'][0]['fg']['green'],main_theme['theme'][0]['fg']['blue']),message)
     t = Thread(target=listen_for_messages)
     t.daemon = True
     t.start()
@@ -276,11 +278,10 @@ def join_srv(name1, address1):
 
         if '//' in to_send:
             to_send = to_send.replace('//', '')
-            to_send = '//'+name+'='+oto_send
+            to_send = '//'+name+'='+to_send
             s.send(to_send.encode())
         else:
-            date_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S') 
-            to_send = f"[{date_now}] {name}{separator_token}{to_send}{Fore.RESET}"
+            to_send = f"[{name}] {to_send}"
             s.send(to_send.encode())
     s.send(f'{name} left')
     s.close()
@@ -397,6 +398,8 @@ copyright1 = """
           | $$                                                                  
           | $$                                                                  
           |__/  
+
+release: v2.03
 github: @klestyselimay
 youtube: @klesty selimay"""
 
