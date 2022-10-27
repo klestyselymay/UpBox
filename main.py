@@ -4,44 +4,38 @@ import socket
 import sys
 import subprocess
 from threading import Thread
-from colorama import Fore, Back
-import colorama
 import time
 import keyboard as kb
 from datetime import datetime
 import random
 import os
 import re
-
-empty1 = ''
-
-def print_there(x, y, text):
-     sys.stdout.write("\x1b7\x1b[%d;%df%s\x1b8" % (x, y, text))
-     sys.stdout.flush()
+import pyautogui
 
 RESET = '\033[0m'
 def get_color_escape(r, g, b, background=False):
     return '\033[{};2;{};{};{}m'.format(48 if background else 38, r, g, b)
 
+#startup
+subprocess.call('cls', shell=True)
+print(f'\r{get_color_escape(255, 255, 255)}initializing'+get_color_escape(21, 170, 13)+'                [##                 ]', end='')
+
 count = 0
-with open('themes.list')as theme_count1:
+with open('themes.ini')as theme_count1:
         for x in theme_count1:
             count = count + 1
 
-with open('themes.list')as theme_list_file:
+with open('themes.ini')as theme_list_file:
     theme_list = theme_list_file.readlines()
 
-with open('themes.list')as theme_list_file1:
+with open('themes.ini')as theme_list_file1:
     theme_name_list = theme_list_file1.read()
 
-#startup
-subprocess.call('cls', shell=True)
-print('\rinitializing'+Fore.RED+'                [##                 ]', end='')
 def print_there(x, y, text):
      sys.stdout.write("\x1b7\x1b[%d;%df%s\x1b8" % (x, y, text))
      sys.stdout.flush()
 time.sleep(1)
-print(Fore.WHITE+'\ropening settings.json'+Fore.RED+'       [#####              ]', end='')
+print(get_color_escape(255, 255, 255)+'\ropening settings.json'+get_color_escape(21, 170, 13)+'       [#####              ]', end='')
 
 with open('settings\\settings.json') as settings_f:
     settings = json.load(settings_f)
@@ -53,23 +47,23 @@ with open(f'themes\\{selected_theme1}\\theme.json') as settings_f2:
 
 time.sleep(.4)
 
-print(Fore.WHITE+'\rloading client items'+Fore.RED+'        [###########        ]', end='')
+print(get_color_escape(255, 255, 255)+'\rloading client items'+get_color_escape(21, 170, 13)+'        [###########        ]', end='')
 
 #client theme
 count_theme = 0
-with open('themes.list')as theme_count1:
+with open('themes.ini')as theme_count1:
         for x in theme_count1:
             count_theme = count_theme + 1
 
-with open('themes.list')as theme_list_file:
+with open('themes.ini')as theme_list_file:
     theme_list = theme_list_file.readlines()
 
-with open('themes.list')as theme_list_file1:
+with open('themes.ini')as theme_list_file1:
     theme_name_list = theme_list_file1.read()
 
 def select_theme(number1):
     global main_theme
-    kb.release('Enter')
+    pyautogui.keyUp('enter')
     print(get_color_escape(main_theme['theme'][0]['fg']['red'], main_theme['theme'][0]['fg']['green'], main_theme['theme'][0]['fg']['blue']))
     subprocess.call('cls', shell=True)
     print(theme_name_list)
@@ -283,29 +277,29 @@ def join_srv(name1, address1):
         else:
             to_send = f"[{name}] {to_send}"
             s.send(to_send.encode())
-    s.send(f'{name} left')
+    s.send(f'{name} left') 
     s.close()
 
 
 time.sleep(1)
-print(Fore.WHITE+'\ropening server.list'+Fore.RED+'         [################   ]', end='')
-with open('server.list')as srv_list_file1:
+print(get_color_escape(255, 255, 255)+'\ropening server.ini'+get_color_escape(21, 170, 13)+'          [################   ]', end='')
+with open('server.ini')as srv_list_file1:
     srv_name_list = srv_list_file1.read()
 
-with open('server.list')as srv_list_file:
+with open('server.ini')as srv_list_file:
     srv_list = srv_list_file.readlines()
     time.sleep(.4)
 
 count = 0
-with open('server.list')as srv_count1:
+with open('server.ini')as srv_count1:
         for x in srv_count1:
             count = count + 1
 
 time.sleep(.4)
-print(Fore.WHITE+'\rloading server.list'+Fore.RED+'         [###################]', end='')
+print(get_color_escape(255, 255, 255)+'\rloading server.ini'+get_color_escape(21, 170, 13)+'          [###################]', end='')
 
 def select_server():
-    kb.release('Enter')
+    pyautogui.keyUp('enter')
     subprocess.call('cls', shell=True)
     print(srv_name_list)
     num1 = 1
@@ -399,7 +393,7 @@ copyright1 = """
           | $$                                                                  
           |__/  
 
-release: v2.03
+release: v2.04
 github: @klestyselimay
 youtube: @klesty selimay"""
 
@@ -435,7 +429,7 @@ if name == 'user':
 
             with open('data\\user.json', 'w')as user_2:
                 json.dump(newname, user_2, indent=4)
-            print(Fore.WHITE)
+            print(get_color_escape(255, 255, 255))
             quit()
 
 print(copyright1+"\n"+"\n")
@@ -458,7 +452,7 @@ str11 = """join server
 select theme"""
 
 def menu1():
-    kb.release('Enter')
+    pyautogui.keyUp('enter')
     subprocess.call('cls', shell=True)
     print(str(str11))
 
