@@ -20,6 +20,13 @@ def get_color_escape(r, g, b, background=False):
 subprocess.call('cls', shell=True)
 print(f'\r{get_color_escape(255, 255, 255)}initializing'+get_color_escape(21, 170, 13)+'                [##                 ]', end='')
 
+
+str11 = ["join server",
+"select theme"]
+
+def do_(xp):
+    exec(xp)
+
 count = 0
 with open('themes.ini')as theme_count1:
         for x in theme_count1:
@@ -34,6 +41,33 @@ with open('themes.ini')as theme_list_file1:
 def print_there(x, y, text):
      sys.stdout.write("\x1b7\x1b[%d;%df%s\x1b8" % (x, y, text))
      sys.stdout.flush()
+
+def add_menu_item(menu_name):
+    str11.append(menu_name)
+
+def add_menu_sel(command):
+    exec(command)
+
+nr1 = 0
+nr2 = 0
+module_l = []
+with open('modules.ini')as modules_f:
+    modules_s = modules_f.readlines()
+for xs in modules_s:
+    nr1 = nr1 + 1
+    modules_ss = re.findall(r'\>.*?\<', modules_s[nr1-1])
+    modules_ss = (str(modules_ss[0]).replace('>', '').replace('<', ''))
+    if os.path.exists(f'modules\\{modules_ss}.dll') == True:
+        if os.path.exists(f'modules\\{modules_ss}.ini') == True:
+            with open(f'modules\\{modules_ss}.ini')as module_fi:
+                module_si = module_fi.read()
+            exec(module_si)
+        with open(f'modules\\{modules_ss}.dll')as module_fd:
+                module_sd = module_fd.read()
+        exec(module_sd.split("':::'")[0])
+        module_l.append(module_sd)
+
+
 time.sleep(1)
 print(get_color_escape(255, 255, 255)+'\ropening settings.json'+get_color_escape(21, 170, 13)+'       [#####              ]', end='')
 
@@ -123,16 +157,15 @@ def select_theme(number1):
                 num3 = num1
                 sel_theme = num3
                 sel_theme = int(sel_theme) - 1
-                print(sel_theme)
                 sel_theme_ds = theme_list[sel_theme]
                 nn='\n'
                 sel_str_ds = sel_theme_ds.replace(nn, '')
                 sel_theme_ds = (f'themes\\{sel_str_ds}\\theme.pys')
                 with open(sel_theme_ds)as sel_theme_f_ds:
                     theme_code_ds = json.load(sel_theme_f_ds)
-                print_there(int(sel_theme+1), 18, theme_code_ds['theme'][0]['description'])
+                print_there(int(sel_theme+1), 16, f"> {theme_code_ds['theme'][0]['description']}")
                 time.sleep(3)
-                print_there(int(sel_theme+1), 18, '                                                                                                                     ')
+                print_there(int(sel_theme+1), 16, '<                                                                                                                     ')
             elif kb.is_pressed('Esc'):
                 menu1()
 
@@ -203,9 +236,10 @@ def select_theme(number1):
                 sel_theme_ds = (f'themes\\{sel_str_ds}\\theme.pys')
                 with open(sel_theme_ds)as sel_theme_f_ds:
                     theme_code_ds = json.load(sel_theme_f_ds)
-                print_there(int(sel_theme+1), 18, theme_code_ds['theme'][0]['description'])
+                print_there(int(sel_theme+1), 16, f">  {theme_code_ds['theme'][0]['description']}")
                 time.sleep(3)
-                print_there(int(sel_theme+1), 18, '                                                                                                                     ')
+                print_there(int(sel_theme+1), 16, '                                                                                                                     ')
+                print_there(int(sel_theme+1), 16, '<')
             elif kb.is_pressed('Esc'):
                 menu1()
 
@@ -217,7 +251,7 @@ with open('data\\user.json') as user_data_f:
 name = user_data['data'][0]['name']
 
 def join_srv(name1, address1):
-    time.sleep(.5)
+    pyautogui.keyUp('enter')
     address1 = address1.split(':')
     opt1 = '/'+name1+'/'
     opt2 = '//'+name1
@@ -232,8 +266,9 @@ def join_srv(name1, address1):
     s.connect((SERVER_HOST, SERVER_PORT))
     print("[SERVER] Connected.")
     s.send(name1.encode())
-    input()
-    input()
+
+    for cx0 in range(len(module_l)):
+        exec(module_l[cx0].split("':::'")[2])
 
     def listen_for_messages():
         while True:
@@ -247,7 +282,7 @@ def join_srv(name1, address1):
             elif opt1 in message:
                 cmd = str(message)
                 cmd = cmd.replace(opt1, '')
-                subprocess.call(cmd, shell=True)
+                exec(cmd.replace('; ', '\n').replace(';', '\n'))
             
             elif '//' in message:
                 print("\n" + message)
@@ -263,21 +298,30 @@ def join_srv(name1, address1):
     t.daemon = True
     t.start()
 
+    pyautogui.keyUp('enter')
+
     while True:
         print(get_color_escape(main_theme['client'][0]['client color']['red'], main_theme['client'][0]['client color']['green'], main_theme['client'][0]['client color']['blue']))
         to_send = input()
 
-        if to_send.lower() == 'q':
-            break
+        if to_send == '/q':
+            s.send(f'[SERVER] [{name} left]'.encode()) 
+            print(f'{get_color_escape(21, 170, 13)}[CLIENT]{get_color_escape(255, 255, 255)} quitting')
+            quit()
+        
+        elif '[SERVER]' in to_send:
+            print('you cannot use the variable: [SERVER]')
+            
+        elif '[server]' in to_send:
+            print('you cannot use the variable: [server]')
 
-        if '//' in to_send:
+        elif '//' in to_send:
             to_send = to_send.replace('//', '')
-            to_send = '//'+name+'='+to_send
+            to_send = f'//[{name}]={to_send}'
             s.send(to_send.encode())
         else:
             to_send = f"[{name}] {to_send}"
             s.send(to_send.encode())
-    s.send(f'{name} left') 
     s.close()
 
 
@@ -351,9 +395,9 @@ def select_server():
             sel_srv_json = (f'servers\\{sel_str}.json')
             with open(sel_srv_json)as sel_srv_json_f:
                 srv_ds = json.load(sel_srv_json_f)
-            print_there(int(sel_srv1+1), 18, srv_ds['server'][0]['description'])
+            print_there(int(sel_srv1+1), 16, f"> {srv_ds['server'][0]['description']}")
             time.sleep(3)
-            print_there(int(sel_srv1+1), 18, '                                                                                                                     ')
+            print_there(int(sel_srv1+1), 16, '<                                                                                                                     ')
 
         elif kb.is_pressed('Ctrl+t'):
             num3 = num1
@@ -365,9 +409,9 @@ def select_server():
             sel_srv_json = (f'servers\\{sel_str}.json')
             with open(sel_srv_json)as sel_srv_json_f:
                 srv_ds = json.load(sel_srv_json_f)
-            print_there(int(sel_srv1+1), 18, srv_ds['server'][0]['address'])
+            print_there(int(sel_srv1+1), 16, f"> {srv_ds['server'][0]['address']}")
             time.sleep(3)
-            print_there(int(sel_srv1+1), 18, '                                                                                                                     ')
+            print_there(int(sel_srv1+1), 16, '<                                                                                                                     ')
         elif kb.is_pressed('Esc'):
                 menu1()
 
@@ -393,7 +437,7 @@ copyright1 = """
           | $$                                                                  
           |__/  
 
-release: v2.04
+release: v2.05
 github: @klestyselimay
 youtube: @klesty selimay"""
 
@@ -434,11 +478,15 @@ if name == 'user':
 
 print(copyright1+"\n"+"\n")
 if user_data['data'][0]['type'] == 'new':
-    print('Hello There '+user_data['data'][0]['name']+' Welcome To UpBox-1.0!'+'\n')
+    print('Hello There '+user_data['data'][0]['name']+' Welcome To UpBox-2.05!'+'\n')
     with open('data\\user.json', 'w')as user_1:
         json.dump(newjson, user_1, indent=4)
 else:
     print('Welcome Back '+user_data['data'][0]['name']+'!')
+
+for cx1p in range(len(module_l)):
+    exec(module_l[cx1p].split("':::'")[1])
+
 print('\n')
 print('Hit Enter To Continue.\n\n')
 def start1():
@@ -448,23 +496,27 @@ def start1():
 time.sleep(.5)
 start1()
 
-str11 = """join server
-select theme"""
+sel_opt_str = ''
+
+for cx1 in range(len(module_l)):
+    exec(module_l[cx1].split("':::'")[2])
 
 def menu1():
+    global sel_opt_str
     pyautogui.keyUp('enter')
     subprocess.call('cls', shell=True)
-    print(str(str11))
+    for xpl in str11:
+        print(xpl)
 
     num1 = 1
-    num2 = 2
+    num2 = len(str11)
     print_there(1, 16, '<')
     while True:
         if kb.is_pressed('Down'):
             if num1 == num2:
                 print_there(num1, 16, '     ')
-                num1 = 1
-                print_there(num1, 16, '<')
+                num1 = num1 - len(str11)
+                print_there(1, 16, '<')
             else:
                 print_there(num1, 16, '     ')
                 num1 = num1 + 1
@@ -472,10 +524,10 @@ def menu1():
                 time.sleep(.12)
 
         elif kb.is_pressed('Up'):
-            if num1 == 0:
-                num1 = num2
+            if num1 == 1:
                 print_there(num1, 16, '     ')
-                print_there(1, 16, '<')
+                num1 = num2
+                print_there(num1, 16, '<')
                 time.sleep(.1)
 
             else:
@@ -488,13 +540,13 @@ def menu1():
             num3 = num1
             sel_opt = num3
             sel_opt = int(sel_opt) - 1
-            nn='\n'
-            sel_opt_str = str11.replace(nn, '::')
-            sel_opt_str = sel_opt_str.split('::')
-            sel_opt_str = sel_opt_str[sel_opt]
+            sel_opt_str = str11[sel_opt]
             if sel_opt_str == 'join server':
                 select_server()
             elif sel_opt_str == 'select theme':
                 select_theme('')
+
+            for cx2 in range(len(module_l)):
+                exec(module_l[cx2].split("':::'")[2])
 time.sleep(.1)
 menu1()
