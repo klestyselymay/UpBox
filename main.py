@@ -68,7 +68,6 @@ for xs in modules_s:
         module_l.append(module_sd)
 
 
-time.sleep(1)
 print(get_color_escape(255, 255, 255)+'\ropening settings.json'+get_color_escape(21, 170, 13)+'       [#####              ]', end='')
 
 with open('settings\\settings.json') as settings_f:
@@ -78,8 +77,6 @@ selected_theme1 = settings['settings'][0]['theme']
 with open(f'themes\\{selected_theme1}\\theme.json') as settings_f2:
     main_theme = json.load(settings_f2) 
 
-
-time.sleep(.4)
 
 print(get_color_escape(255, 255, 255)+'\rloading client items'+get_color_escape(21, 170, 13)+'        [###########        ]', end='')
 
@@ -325,7 +322,6 @@ def join_srv(name1, address1):
     s.close()
 
 
-time.sleep(1)
 print(get_color_escape(255, 255, 255)+'\ropening server.ini'+get_color_escape(21, 170, 13)+'          [################   ]', end='')
 with open('server.ini')as srv_list_file1:
     srv_name_list = srv_list_file1.read()
@@ -417,8 +413,6 @@ def select_server():
 
 
         
-
-time.sleep(.4)
 
 print('\r                                                                                      ', end='')
 
