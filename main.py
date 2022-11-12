@@ -58,12 +58,8 @@ for xs in modules_s:
     modules_ss = re.findall(r'\>.*?\<', modules_s[nr1-1])
     modules_ss = (str(modules_ss[0]).replace('>', '').replace('<', ''))
     if os.path.exists(f'modules\\{modules_ss}.dll') == True:
-        if os.path.exists(f'modules\\{modules_ss}.ini') == True:
-            with open(f'modules\\{modules_ss}.ini')as module_fi:
-                module_si = module_fi.read()
-            exec(module_si)
         with open(f'modules\\{modules_ss}.dll')as module_fd:
-                module_sd = module_fd.read()
+            module_sd = module_fd.read()
         exec(module_sd.split("':::'")[0])
         module_l.append(module_sd)
 
@@ -431,7 +427,7 @@ copyright1 = """
           | $$                                                                  
           |__/  
 
-release: v2.05
+release: v2.07
 github: @klestyselimay
 youtube: @klesty selimay"""
 
@@ -472,7 +468,7 @@ if name == 'user':
 
 print(copyright1+"\n"+"\n")
 if user_data['data'][0]['type'] == 'new':
-    print('Hello There '+user_data['data'][0]['name']+' Welcome To UpBox-2.05!'+'\n')
+    print('Hello There '+user_data['data'][0]['name']+' Welcome To UpBox-2.07!'+'\n')
     with open('data\\user.json', 'w')as user_1:
         json.dump(newjson, user_1, indent=4)
 else:
