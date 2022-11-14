@@ -11,6 +11,7 @@ import random
 import os
 import re
 import pyautogui
+import threading
 
 RESET = '\033[0m'
 def get_color_escape(r, g, b, background=False):
@@ -23,9 +24,6 @@ print(f'\r{get_color_escape(255, 255, 255)}initializing'+get_color_escape(21, 17
 
 str11 = ["join server",
 "select theme"]
-
-def do_(xp):
-    exec(xp)
 
 count = 0
 with open('themes.ini')as theme_count1:
@@ -57,8 +55,8 @@ for xs in modules_s:
     nr1 = nr1 + 1
     modules_ss = re.findall(r'\>.*?\<', modules_s[nr1-1])
     modules_ss = (str(modules_ss[0]).replace('>', '').replace('<', ''))
-    if os.path.exists(f'modules\\{modules_ss}.dll') == True:
-        with open(f'modules\\{modules_ss}.dll')as module_fd:
+    if os.path.exists(f'modules\\{modules_ss}.py') == True:
+        with open(f'modules\\{modules_ss}.py')as module_fd:
             module_sd = module_fd.read()
         exec(module_sd.split("':::'")[0])
         module_l.append(module_sd)
@@ -243,95 +241,112 @@ with open('data\\user.json') as user_data_f:
 
 name = user_data['data'][0]['name']
 
-def join_srv(name1, address1):
-    pyautogui.keyUp('enter')
+def join_srv(name1, address1 ,sud):
+    subprocess.call('cls', shell=True)
     address1 = address1.split(':')
-    opt1 = '/'+name1+'/'
-    opt2 = '//'+name1
+    opt1 = '//'+name1+'//'
+    # opt2 = '//'+name1
     name123 = f'[{name1}]'
-    SERVER_HOST = address1[0]
-    SERVER_PORT = int(address1[1])
-    separator_token = ": "
 
-    s = socket.socket()
-
-    print(f"[CLiENT] Connecting to {SERVER_HOST}:{SERVER_PORT}...")
-    s.connect((SERVER_HOST, SERVER_PORT))
-    print("[SERVER] Connected.")
-    s.send(name1.encode())
-
-    for cx0 in range(len(module_l)):
-        exec(module_l[cx0].split("':::'")[2])
-
-    def listen_for_messages():
-        while True:
-            message = s.recv(1024).decode()
-            print(get_color_escape(main_theme['client'][0]['server color']['red'], main_theme['client'][0]['server color']['green'], main_theme['client'][0]['server color']['blue']))
-
-            if opt2 in message:
-                epr = message.replace(opt2, "")
-                print(epr)
-
-            elif opt1 in message:
-                cmd = str(message)
-                cmd = cmd.replace(opt1, '')
-                exec(cmd.replace('; ', '\n').replace(';', '\n'))
+    host = address1[0]
+    port = int(address1[1])
+    pyautogui.keyUp('enter')
+    uname = name1
+    def connect():
+        global s
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect((host,port))
+        pyautogui.keyUp('enter')
+        s.send('389237489264738728402938242'.encode('ascii'))
+        pyautogui.keyUp('enter')
+        pyautogui.keyUp('enter')
+        time.sleep(.1)
+        s.send(uname.encode('ascii'))
+        pyautogui.keyUp('enter')
+        pyautogui.keyUp('enter')
+        pyautogui.keyUp('enter')
+        pyautogui.keyUp('enter')
+        pyautogui.keyUp('enter')
+        print('[CLIENT] connected')
+        for cx0 in range(len(module_l)):
+            exec(module_l[cx0].split("':::'")[3])
             
-            elif '//' in message:
-                print("\n" + message)
+    connect()
+    clientRunning = True
 
-            elif name123 in message:
-                print(get_color_escape(main_theme['client'][0]['client color']['red'], main_theme['client'][0]['client color']['green'], main_theme['client'][0]['client color']['blue'])+name123+get_color_escape(main_theme['theme'][0]['fg']['red'], main_theme['theme'][0]['fg']['green'], main_theme['theme'][0]['fg']['blue']) + message.replace(name123, ' '))
+    def echo_data(sock):
+       serverDown = False
+       lio = False
+       while clientRunning and (not serverDown):
+          try:
+            data = sock.recv(1024).decode('ascii')
+            if data == f'43896jfr2j36ru93fruyj63u9kfr39>{uname}<em8jy42oriy2ofrju3oru37u3j':
+                print(data)
+                s.close()
+                menu1()
+            elif opt1 in data:
+                data = data.replace(opt1, '')
+                data = data.replace('; ', '\n')
+                data = data.replace(';', '\n')
+                exec(data)
 
             else:
-                message_s = re.findall(r'\[.*?\]', message)
-                message = message.replace(f'{message_s[0]} ', '')
-                print(get_color_escape(main_theme['client'][0]['server color']['red'],main_theme['client'][0]['server color']['green'],main_theme['client'][0]['server color']['blue'])+"\n"+message_s[0],get_color_escape(main_theme['theme'][0]['fg']['red'],main_theme['theme'][0]['fg']['green'],main_theme['theme'][0]['fg']['blue']),message)
-    t = Thread(target=listen_for_messages)
-    t.daemon = True
-    t.start()
+                if lio == False:
+                    print(data)
+                    lio = True
 
-    pyautogui.keyUp('enter')
+                else:
+                    message_s = re.findall(r'\[.*?\]', data)[0]
+                    message = data.replace(f'{message_s}', '')
+                    if message_s == name123:
+                        print(get_color_escape(main_theme['client'][0]['client color']['red'], main_theme['client'][0]['client color']['green'], main_theme['client'][0]['client color']['blue'])+name123+get_color_escape(main_theme['theme'][0]['fg']['red'], main_theme['theme'][0]['fg']['green'], main_theme['theme'][0]['fg']['blue']), message.replace(name123, ''))
+                    else:
+                        print(get_color_escape(main_theme['client'][0]['server color']['red'],main_theme['client'][0]['server color']['green'],main_theme['client'][0]['server color']['blue'])+"\n"+message_s,get_color_escape(main_theme['theme'][0]['fg']['red'],main_theme['theme'][0]['fg']['green'],main_theme['theme'][0]['fg']['blue']),message)
+                
+          except Exception as e:
+            print(e)
+            print('[CLIENT] Server is Down. You are now Disconnected. Quitting to main menu...')
+            serverDown = True
+            time.sleep(1)
+            menu1()
 
-    while True:
-        print(get_color_escape(main_theme['client'][0]['client color']['red'], main_theme['client'][0]['client color']['green'], main_theme['client'][0]['client color']['blue']))
-        to_send = input()
 
-        if to_send == '/q':
-            s.send(f'[SERVER] [{name} left]'.encode()) 
-            print(f'{get_color_escape(21, 170, 13)}[CLIENT]{get_color_escape(255, 255, 255)} quitting')
-            quit()
-        
-        elif '[SERVER]' in to_send:
-            print('you cannot use the variable: [SERVER]')
+    threading.Thread(target=echo_data, args = (s,)).start()
+    while clientRunning:
+        try:
+            tempMsg = input()
+            if tempMsg == '?q':
+                menu1()
+            elif tempMsg == '?r':
+                connect()
+            elif tempMsg == '?ip':
+                sel_srv_json = (f'servers\\{sud}.json')
+                with open(sel_srv_json)as sel_srv_json_f:
+                    srv_ds = json.load(sel_srv_json_f)
+                print(srv_ds['server'][0]['address'])
+            elif tempMsg == '?nm':
+                print(sud)
             
-        elif '[server]' in to_send:
-            print('you cannot use the variable: [server]')
+            for cx349 in range(len(module_l)):
+                exec(module_l[cx349].split("':::'")[4])
 
-        elif '//' in to_send:
-            to_send = to_send.replace('//', '')
-            to_send = f'//[{name}]={to_send}'
-            s.send(to_send.encode())
-        else:
-            to_send = f"[{name}] {to_send}"
-            s.send(to_send.encode())
+            else:
+                data = name123 + tempMsg
+                s.send(data.encode('ascii'))
+        except Exception as e:
+            print(e)
     s.close()
-
 
 print(get_color_escape(255, 255, 255)+'\ropening server.ini'+get_color_escape(21, 170, 13)+'          [################   ]', end='')
 with open('server.ini')as srv_list_file1:
     srv_name_list = srv_list_file1.read()
-
 with open('server.ini')as srv_list_file:
     srv_list = srv_list_file.readlines()
-    time.sleep(.4)
-
 count = 0
 with open('server.ini')as srv_count1:
         for x in srv_count1:
             count = count + 1
 
-time.sleep(.4)
 print(get_color_escape(255, 255, 255)+'\rloading server.ini'+get_color_escape(21, 170, 13)+'          [###################]', end='')
 
 def select_server():
@@ -373,10 +388,14 @@ def select_server():
             sel_srv = srv_list[sel_srv]
             nn='\n'
             sel_str = sel_srv.replace(nn, '')
-            sel_srv = (f'servers\\{sel_str}.srv')
+            sel_srv = (f'servers\\{sel_str}.json')
             with open(sel_srv) as addrfile:
-                address = addrfile.read()
-            join_srv(name, address)
+                address = json.load(addrfile)['server'][0]['address']
+            try:
+                join_srv(name, address, sel_str)
+            except ConnectionRefusedError as e:
+                print('[CLI-ERR] Could not connect to server. A: server is down. B cli has a net problem.. ERRCODE:'+str(e))
+
         elif kb.is_pressed('Ctrl+d'):
             num3 = num1
             sel_srv = num3
@@ -427,20 +446,11 @@ copyright1 = """
           | $$                                                                  
           |__/  
 
-release: v2.07
+release: v2.08
 github: @klestyselimay
 youtube: @klesty selimay"""
 
 
-
-newjson = {
-    "data":[
-        {
-        "name": name,
-        "type": "normal"
-        }
-    ]
-}
 print(get_color_escape(main_theme['theme'][0]['fg']['red'], main_theme['theme'][0]['fg']['green'], main_theme['theme'][0]['fg']['blue']))
 
 if name == 'user':
@@ -452,6 +462,9 @@ if name == 'user':
             elif nm == name:
                 continue
             else:
+                num39 = random.randint(1000, 9999)
+                nm = f"{nm}#{num39}"
+                name = nm
                 newname = {
                         "data": [
                             {
@@ -460,15 +473,24 @@ if name == 'user':
                             }
                         ]
                     }
-
             with open('data\\user.json', 'w')as user_2:
                 json.dump(newname, user_2, indent=4)
-            print(get_color_escape(255, 255, 255))
-            quit()
+            with open('data\\user.json')as wqyei:
+                user_data = json.load(wqyei)
+            break
+
 
 print(copyright1+"\n"+"\n")
 if user_data['data'][0]['type'] == 'new':
-    print('Hello There '+user_data['data'][0]['name']+' Welcome To UpBox-2.07!'+'\n')
+    newjson = {
+        "data":[
+            {
+            "name": nm,
+            "type": "normal"
+            }
+        ]
+    }
+    print('Hello There '+user_data['data'][0]['name']+' Welcome To UpBox-2.08!'+'\n')
     with open('data\\user.json', 'w')as user_1:
         json.dump(newjson, user_1, indent=4)
 else:
@@ -481,7 +503,8 @@ print('\n')
 print('Hit Enter To Continue.\n\n')
 def start1():
     while True:
-        if kb.read_key() == 'enter':
+        if kb.is_pressed('enter'):
+            pyautogui.keyUp('enter')
             break
 time.sleep(.5)
 start1()

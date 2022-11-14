@@ -50,3 +50,5 @@ if sel_opt_str == 'test':
     menu_test1()
 
 ':::' #once joined server
+
+':::' #once message sent

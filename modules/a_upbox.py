@@ -3,9 +3,6 @@ srv_joined = True
 def get_color_escape(r, g, b, background=False):
     print(r, g, b, background)
 
-def do_(xp):
-    print(xp)
-
 def print_there(x, y, text):
     print(x, y, text)
 
