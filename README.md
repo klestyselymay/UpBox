@@ -16,3 +16,8 @@ UpBox-2.0.9 is a free open source hacking tool that allow you to use the run pyt
 - You can also do this with the themes and modules.
 - you can select a server and hit <kbd>Ctrl+t</kbd> and the ip and port of the server should show up.
 - if you want to join a server you can select the server and hit <kbd>Enter</kbd>
+
+
+# Installation
+## Mac
+    'git clone'
