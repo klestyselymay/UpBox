@@ -1,7 +1,7 @@
 # UpBox-2.0.9
 UpBox-2.0.9 is a free open source hacking tool that allow you to use the run python code while messaging your server or team.
 
-#New features:
+# New features:
 - Completely replaced the selection system,
 - Better naming: before `username` after `username#1234`
 
