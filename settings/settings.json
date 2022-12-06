@@ -1,7 +1,7 @@
 {
-    "settings": [
-        {
-            "theme": "default"
-        }
-    ]
+   "settings": [
+      {
+         "theme": "macos"
+      }
+   ]
 }

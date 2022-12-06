@@ -1,10 +1,8 @@
 {
     "theme":[
         {
-            "bg":{
-                "red": "0",
-                "green": "0",
-                "blue": "0"
+            "menu":{
+                "color": "red"
             },
 
             "fg":{
@@ -19,14 +17,14 @@
         {
             "client color": {
                 "red": "255",
-                "green": "255",
-                "blue": "255"
+                "green": "0",
+                "blue": "0"
             },
 
             "server color": {
                 "red": "255",
-                "green": "0",
-                "blue": "0"
+                "green": "255",
+                "blue": "255"
             }
         }
     ]

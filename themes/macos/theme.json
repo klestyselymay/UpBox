@@ -1,0 +1,31 @@
+{
+    "theme":[
+        {
+            "menu":{
+                "color": "purple"
+            },
+
+            "fg":{
+                "red": "174",
+                "green": "0",
+                "blue": "255"
+            }
+        }
+    ],
+
+    "client":[
+        {
+            "client color": {
+                "red": "100",
+                "green": "0",
+                "blue": "214"
+            },
+
+            "server color": {
+                "red": "174",
+                "green": "0",
+                "blue": "255"
+            }
+        }
+    ]
+}

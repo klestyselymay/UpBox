@@ -1,2 +1,2 @@
-pyautogui
-keyboard
+better_profanity
+simple_term_menu

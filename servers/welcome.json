@@ -1,8 +1,0 @@
-{
-    "server":[
-        {
-            "address": "127.0.0.1:5000",
-            "description": "this server is for testing"
-        }
-    ]
-}

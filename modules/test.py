@@ -1,19 +1,19 @@
+#from a_upbox import *
 #on startup
 item1_list = ["test", "test2"]
 add_menu_item('test')
 def menu_test1():
-    print('hi w')
+    print(create_menu(['hi', 'hi1']))
 
 ':::' #once it started
-print('hd')
-
-':::' #on menu selection
 print('hi')
-if sel_opt_str == 'test':
+
+':::' #check for option
+if sel_option == 'test':
     menu_test1()
 
 ':::' #once joined server
-print('hello')
+print('joined!')
 
 ':::' #once message sent
-print('sent')
+print('msg')

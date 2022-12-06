@@ -1,4 +1,17 @@
-srv_joined = True
+srv_joined = False
+
+def create_menu(list_items, use_list=True):
+    os.system('clear')
+    main_menu = TerminalMenu(list_items, menu_highlight_style=(f"bg_{str(main_theme['theme'][0]['menu']['color']).lower()}",
+    "fg_yellow"), clear_screen=True)
+    option_out = main_menu.show()
+    if option_out == None:
+        menu1()
+    else:
+        if use_list == True:
+            return list_items[option_out]
+        else:
+            return option_out
 
 def get_color_escape(r, g, b, background=False):
     print(r, g, b, background)
