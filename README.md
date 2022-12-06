@@ -20,4 +20,4 @@ UpBox-2.0.9 is a free open source hacking tool that allow you to use the run pyt
 
 # Installation
 ## Mac
-    'git clone'
+    'git clone '
